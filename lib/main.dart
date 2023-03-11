@@ -1,5 +1,9 @@
+import 'package:beomboo/Provider/ChatNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:provider/provider.dart';
+
+import 'View/ChatPage.dart';
 
 // https://box-world.tistory.com/75
 
@@ -16,7 +20,12 @@ class beomboo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: beombooPage(),
+      home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => ChatNotifier())
+          ],
+          child: beombooPage()
+      ),
     );
   }
 }
@@ -60,7 +69,6 @@ class _beombooPageState extends State<beombooPage> {
     FlutterNativeSplash.remove();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,27 +79,32 @@ class _beombooPageState extends State<beombooPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("BeomBoo",style: TextStyle(fontSize: 25),),
-                IconButton(onPressed: (){}, icon: Icon(Icons.add_alert))
+                IconButton(onPressed: (){}, icon: Icon(Icons.chat))
               ])),
         body: Container(
-          decoration: BoxDecoration(color: Colors.amber),
-          child: Column(
-            children: [
-              Flexible(
-                child: Padding(padding: const EdgeInsets.all(15.0),
+          decoration: const BoxDecoration(color: Colors.amber),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Expanded(
                   child: Container(
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                    child: IconButton(onPressed: (){}, icon: Icon(Icons.start),)
-                  ))),
-              Flexible(
-                flex: 3,
-                child: Padding(padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                  )))
-            ],
-          ),
-        ),
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount:context.read<ChatNotifier>().chatMessageContet.length,
+                      itemBuilder: (context, int index){
+                        return context.read<ChatNotifier>().chatMessageContet[index];
+                      }),
+                  ),
+                ),
+                Padding(
+                  padding:EdgeInsets.only(top: 8.0),
+                  child: ChatPage(),
+                ),
+              ],
+            ),
+          )),
       ),
     );
   }
