@@ -36,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
           child: TextField(
             controller: _textController,
-            onSubmitted: (text){
+            onSubmitted: (text) async {
               print("onSubmitted: ${text}");
               context.read<ChatNotifier>().setMessage(text);
               _textController.clear();

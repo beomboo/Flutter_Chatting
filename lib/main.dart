@@ -71,6 +71,7 @@ class _beombooPageState extends State<beombooPage> {
 
   @override
   Widget build(BuildContext context) {
+    var listObj = context.select((ChatNotifier notifier) => notifier.chatMessageContent);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -90,12 +91,15 @@ class _beombooPageState extends State<beombooPage> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount:context.read<ChatNotifier>().chatMessageContet.length,
-                      itemBuilder: (context, int index){
-                        return context.read<ChatNotifier>().chatMessageContet[index];
-                      }),
+                    child: CustomScrollView(
+                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                      slivers: [
+                        SliverList(delegate: SliverChildListDelegate(
+                          context.watch<ChatNotifier>().chatMessageContent
+                          //   context.select((ChatNotifier notifier) => notifier.chatMessageContet)
+                        ))
+                      ],
+                    )
                   ),
                 ),
                 Padding(
