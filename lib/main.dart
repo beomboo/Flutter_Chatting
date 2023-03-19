@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import 'View/ChatPage.dart';
+import 'View/HomePage.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -15,9 +16,14 @@ class beomboo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: beombooPage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_)=> ChatNotifier())
+      ],
+      child: MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: beombooPage(),
+      ),
     );
   }
 }
@@ -63,23 +69,31 @@ class _beombooPageState extends State<beombooPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ChatNotifier())
-      ],
-      child: SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.amberAccent,
-            title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("BeomBoo",style: TextStyle(fontSize: 25),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.chat))
-                ])),
-          body: ChatPage(),
-        ),
-      ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amberAccent,
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("BeomBoo",style: TextStyle(fontSize: 25),),
+              IconButton(
+               onPressed: (){
+                 Navigator.push(context,MaterialPageRoute(builder: (context) => ChatPage()));
+               },
+               icon: Container(
+                 width: 30,
+                 height: 30,
+                 decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color: Colors.red
+                 ),
+                 child: Center(
+                   child: Text(context.select((ChatNotifier notifier) => notifier.chatMessageLength.toString()),
+                       style: TextStyle(fontSize: 15,color: Colors.white)),
+                 ),
+               ))
+            ])),
+      body: HomePage(),
     );
   }
 }

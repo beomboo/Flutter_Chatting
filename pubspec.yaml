@@ -37,6 +37,8 @@ dependencies:
   provider: ^6.0.5
   # 스플레시 플러그인
   flutter_native_splash: ^2.1.6
+  # 웹뷰
+  webview_flutter: ^4.0.6
 
 dev_dependencies:
   flutter_test:

@@ -15,38 +15,48 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(color: Colors.amber),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverList(delegate: SliverChildListDelegate(
-                            context.select((ChatNotifier notifier) => notifier.chatMessageContent)
-                        ))],
-                    ))),
-              Padding(
-                padding:EdgeInsets.only(top: 8.0),
-                child: Row(children: [
-                    ChatInputField(),
-                    GestureDetector(
-                      onTap: (){
-                        context.read<ChatNotifier>().resetChat();
-                      },
-                      child: Icon(Icons.forum,color: Colors.white,),
-                    )
-                ],),
-              ),
-            ],
-          ),
-        ));
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.amberAccent,
+          title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Chatting",style: TextStyle(fontSize: 25),),
+                IconButton(onPressed: (){}, icon: Icon(Icons.chat))
+              ])),
+      body: Container(
+          decoration: const BoxDecoration(color: Colors.amber),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverList(delegate: SliverChildListDelegate(
+                              context.select((ChatNotifier notifier) => notifier.chatMessageContent)
+                          ))],
+                      ))),
+                Padding(
+                  padding:EdgeInsets.only(top: 8.0),
+                  child: Row(children: [
+                      ChatInputField(),
+                      GestureDetector(
+                        onTap: (){
+                          context.read<ChatNotifier>().resetChat();
+                        },
+                        child: Icon(Icons.forum,color: Colors.white,),
+                      )
+                  ],),
+                ),
+              ],
+            ),
+          )),
+    );
   }
 
   /// 입력창
