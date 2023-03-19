@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:beomboo/Provider/ChatNotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,20 +12,44 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final TextEditingController _textController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-        ChatInputField(),
-        GestureDetector(
-          onTap: (){
-              context.read<ChatNotifier>().resetChat();
-            },
-          child: Icon(Icons.forum,color: Colors.white,),
-        )],
-    );
+    return Container(
+        decoration: const BoxDecoration(color: Colors.amber),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList(delegate: SliverChildListDelegate(
+                            context.select((ChatNotifier notifier) => notifier.chatMessageContent)
+                        ))],
+                    ))),
+              Padding(
+                padding:EdgeInsets.only(top: 8.0),
+                child: Row(children: [
+                    ChatInputField(),
+                    GestureDetector(
+                      onTap: (){
+                        context.read<ChatNotifier>().resetChat();
+                      },
+                      child: Icon(Icons.forum,color: Colors.white,),
+                    )
+                ],),
+              ),
+            ],
+          ),
+        ));
   }
+
+  /// 입력창
   Widget ChatInputField(){
     return Expanded(
       child: Padding(
@@ -35,15 +61,12 @@ class _ChatPageState extends State<ChatPage> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           child: TextField(
-            controller: _textController,
-            onSubmitted: (text) async {
+            controller: context.read<ChatNotifier>().textController,
+            onSubmitted: (text) {
               print("onSubmitted: ${text}");
-              context.read<ChatNotifier>().setMessage(text);
-              _textController.clear();
+              context.read<ChatNotifier>().setMessage(ChatContent(text));
             },
-            onChanged: (text){
-              print("onChanged: ${text}");
-            },
+            onChanged: (text){},
             style: TextStyle(fontSize: 14.0, color: Colors.black45),
             keyboardType: TextInputType.text,
             decoration: const InputDecoration(
@@ -53,6 +76,35 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// 채팅내용
+  Widget ChatContent(message){
+    var rnd = Random().nextInt(999);
+    String userIndex = rnd.toString();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: rnd % 2 == 1 ?  CrossAxisAlignment.start : CrossAxisAlignment.end,
+        children: [
+          RichText( // 프로필 사진 & 아이디
+              text: TextSpan(
+                  children: [
+                    WidgetSpan(child: Icon(Icons.account_circle)),
+                    TextSpan(
+                        text: userIndex,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        )
+                    )
+                  ]
+              )
+          ),
+          Text(message) // 채팅 내용
+        ],
       ),
     );
   }

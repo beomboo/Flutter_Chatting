@@ -4,9 +4,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import 'View/ChatPage.dart';
-
-// https://box-world.tistory.com/75
-
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -20,12 +17,7 @@ class beomboo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => ChatNotifier())
-          ],
-          child: beombooPage()
-      ),
+      home: beombooPage(),
     );
   }
 }
@@ -71,44 +63,22 @@ class _beombooPageState extends State<beombooPage> {
 
   @override
   Widget build(BuildContext context) {
-    var listObj = context.select((ChatNotifier notifier) => notifier.chatMessageContent);
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.amberAccent,
-          title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("BeomBoo",style: TextStyle(fontSize: 25),),
-                IconButton(onPressed: (){}, icon: Icon(Icons.chat))
-              ])),
-        body: Container(
-          decoration: const BoxDecoration(color: Colors.amber),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
-                    child: CustomScrollView(
-                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                      slivers: [
-                        SliverList(delegate: SliverChildListDelegate(
-                          context.watch<ChatNotifier>().chatMessageContent
-                          //   context.select((ChatNotifier notifier) => notifier.chatMessageContet)
-                        ))
-                      ],
-                    )
-                  ),
-                ),
-                Padding(
-                  padding:EdgeInsets.only(top: 8.0),
-                  child: ChatPage(),
-                ),
-              ],
-            ),
-          )),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ChatNotifier())
+      ],
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.amberAccent,
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("BeomBoo",style: TextStyle(fontSize: 25),),
+                  IconButton(onPressed: (){}, icon: Icon(Icons.chat))
+                ])),
+          body: ChatPage(),
+        ),
       ),
     );
   }
