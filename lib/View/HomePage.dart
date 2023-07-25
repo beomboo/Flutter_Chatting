@@ -1,9 +1,6 @@
-import 'package:beomboo/Provider/ChatNotifier.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'ChatPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +13,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    //Localizations.localeOf(context).languageCode
     initializeDateFormatting();
   }
   @override
