@@ -8,6 +8,7 @@ void main() {
   runApp(const beomboo());
 }
 
+/// test
 FireBaseCore fireBaseCore = FireBaseCore();
 
 class beomboo extends StatelessWidget {
