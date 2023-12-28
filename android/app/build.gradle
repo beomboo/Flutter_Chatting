@@ -49,6 +49,7 @@ android {
         applicationId "com.example.beomboo"
         minSdkVersion 19
         targetSdkVersion 33
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
